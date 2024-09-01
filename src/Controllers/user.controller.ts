@@ -25,9 +25,8 @@ class userController {
 
     public async getId(req: Request, res: Response, next: NextFunction): Promise<Response> {
         try {
-            // Implement your logic here
-            const result = {lives: 5}; // Example response
-            return res.status(200).json(result);
+            const email = req.body.email;
+            return res.status(200).json({"email": email});
         } catch (error) {
             const err = error as Error;
             return res.status(500).json({error: err.message});
@@ -58,6 +57,7 @@ class userController {
 
     public async getSkins(req: Request, res: Response, next: NextFunction): Promise<Response> {
         try {
+
             // Implement your logic here
             const result = {skins: 10}; // Example response
             return res.status(200).json(result);
