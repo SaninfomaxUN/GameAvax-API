@@ -1,31 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
+import Web3 from 'web3';
+import {getUserByEmail, registerUser, getEmailById} from "../Services/contractService";
 
 class userController {
-    public async getCoins(req: Request, res: Response, next: NextFunction): Promise<Response> {
-        try {
-            // Implement your logic here
-            const result = {coins: 100}; // Example response
-            return res.status(200).json(result);
-        } catch (error) {
-            const err = error as Error;
-            return res.status(500).json({error: err.message});
-        }
-    }
 
-    public async getGems(req: Request, res: Response, next: NextFunction): Promise<Response> {
-        try {
-            // Implement your logic here
-            const result = {gems: 100}; // Example response
-            return res.status(200).json(result);
-        } catch (error) {
-            const err = error as Error;
-            return res.status(500).json({error: err.message});
-        }
-    }
-
-    public async getId(req: Request, res: Response, next: NextFunction): Promise<Response> {
+    //Get a user by email
+    public async getUserByEmail(req: Request, res: Response): Promise<Response> {
         try {
             const email = req.body.email;
+            //----
+            const receipt = await getUserByEmail(email);
             return res.status(200).json({"email": email});
         } catch (error) {
             const err = error as Error;
@@ -33,34 +17,29 @@ class userController {
         }
     }
 
-    public async setId(req: Request, res: Response, next: NextFunction): Promise<Response> {
+    //Get a user by id
+    public async getEmailById(req: Request, res: Response): Promise<Response> {
         try {
-            // Implement your logic here
-            const result = {lives: 5}; // Example response
-            return res.status(200).json(result);
+            const id = req.body.id;
+            //----
+            const receipt = await getEmailById(id);
+            return res.status(200).json({"email": receipt});
         } catch (error) {
             const err = error as Error;
             return res.status(500).json({error: err.message});
         }
     }
 
-    public async getProgress(req: Request, res: Response, next: NextFunction): Promise<Response> {
+    //Register a new user
+    public async registerUser(req: Request, res: Response): Promise<Response> {
         try {
-            // Implement your logic here
-            const result = {progress: 50}; // Example response
-            return res.status(200).json(result);
-        } catch (error) {
-            const err = error as Error;
-            return res.status(500).json({error: err.message});
-        }
-    }
-
-    public async getSkins(req: Request, res: Response, next: NextFunction): Promise<Response> {
-        try {
-
-            // Implement your logic here
-            const result = {skins: 10}; // Example response
-            return res.status(200).json(result);
+            const email = req.body.email;
+            const name = req.body.name;
+            //----
+            const receipt = await registerUser(email, name);
+            console.log(receipt);
+            //----
+            return res.status(200).json({message: "User created successfully"});
         } catch (error) {
             const err = error as Error;
             return res.status(500).json({error: err.message});

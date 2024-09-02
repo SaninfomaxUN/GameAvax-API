@@ -1,4 +1,5 @@
 import express, {Application} from "express";
+import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./Routes/user.routes";
 
@@ -7,6 +8,7 @@ export class App {
 
     constructor() {
         this.app = express();
+        dotenv.config();
         this.middlewares();
         this.routes();
     }
