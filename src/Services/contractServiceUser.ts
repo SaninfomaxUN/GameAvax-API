@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import dotenv from 'dotenv';
-import contractABI from '../Services/userContract.json'; // Import the contract ABI
+import contractABIUser from '../Services/userContract.json'; // Import the contract ABI
 
 dotenv.config();
 
@@ -18,20 +18,11 @@ web3.eth.accounts.wallet.add(account);
 web3.eth.defaultAccount = account.address;
 
 // Contract instance
-const contract = new web3.eth.Contract(
-    contractABI as any,
-    process.env.CONTRACT_ADDRESS
+const contractUser = new web3.eth.Contract(
+    contractABIUser as any,
+    process.env.CONTRACT_ADDRESS_USER
 );
 
-// Function to get data from the contract
-export const getContractValue = async (): Promise<any> => {
-    try {
-        return await contract.methods.getValue().call();
-    } catch (error) {
-        console.error("Error getting value from contract:", error);
-        throw error;
-    }
-};
 
 // Function to register a user in the contract
 export const registerUser = async (_email: string, _name: string): Promise<any> => {
@@ -39,7 +30,7 @@ export const registerUser = async (_email: string, _name: string): Promise<any> 
         const balance = await web3.eth.getBalance(account.address);
         console.log(`Account Balance: ${balance} Wei`);
 
-        const receipt = await contract.methods.registerUser(_email, _name).send({
+        const receipt = await contractUser.methods.registerUser(_email, _name).send({
             from: account.address
         });
 
@@ -61,12 +52,15 @@ export const registerUser = async (_email: string, _name: string): Promise<any> 
 // Function to get a user by email
 export const getUserByEmail = async (_email: string): Promise<any> => {
     try {
-        const receipt = await contract.methods.getUserByEmail(_email).send({
+        const receipt = await contractUser.methods.getUserByEmail(_email).call({
             from: account.address
         });
-        return await contract.methods.getUserByEmail(_email).send({
-            from: account.address
-        });
+
+        // Check the transaction receipt and log the result
+
+        console.log('Transaction Details:', receipt);
+
+        return receipt;
     } catch (error) {
         console.error("Error getting user by email from contract:", error);
         throw error;
@@ -76,14 +70,17 @@ export const getUserByEmail = async (_email: string): Promise<any> => {
 // Function to get a user by id
 export const getEmailById = async (_id: number): Promise<any> => {
     try {
-        const receipt = await contract.methods.getEmailById(_id).send({
+        const receipt = await contractUser.methods.getEmailById(_id).call({
             from: account.address
         });
-        return await contract.methods.getEmailById(_id).send({
-            from: account.address
-        });
+
+        console.log('Transaction Details:', receipt);
+        return receipt;
+
     } catch (error) {
         console.error("Error getting user by id from contract:", error);
         throw error;
     }
 };
+
+

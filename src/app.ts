@@ -2,6 +2,7 @@ import express, {Application} from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./Routes/user.routes";
+import progressRoutes from "./Routes/progress.routes";
 
 export class App {
     private readonly app: Application;
@@ -27,6 +28,7 @@ export class App {
     private routes() {
         const start = "/api";
         this.app.use(start + "/user", userRoutes);
+        this.app.use(start + "/progress", progressRoutes);
     }
 
     public getServer() {

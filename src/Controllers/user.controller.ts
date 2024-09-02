@@ -1,6 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import Web3 from 'web3';
-import {getUserByEmail, registerUser, getEmailById} from "../Services/contractService";
+import { Request, Response } from 'express';
+import {getUserByEmail, registerUser, getEmailById} from "../Services/contractServiceUser";
 
 class userController {
 
@@ -10,7 +9,7 @@ class userController {
             const email = req.body.email;
             //----
             const receipt = await getUserByEmail(email);
-            return res.status(200).json({"email": email});
+            return res.status(200).json({receipt});
         } catch (error) {
             const err = error as Error;
             return res.status(500).json({error: err.message});
